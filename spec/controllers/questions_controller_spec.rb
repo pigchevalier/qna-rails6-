@@ -90,4 +90,49 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    let!(:question) { create(:question, user: user) }
+
+    context 'author, with valid attributes' do
+      before { login(user) }
+
+      it 'change the question' do
+        patch :update, params: { id: question, question: {title: "new title", body: 'new body'} } , format: :js 
+        question.reload
+        expect(question.title).to eq('new title')
+        expect(question.body).to eq('new body')
+      end
+  
+      it 'render update' do
+        patch :update, params: { id: question, question: {title: "new title", body: 'new body'} }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'author, with invalid attributes' do
+      before { login(user) }
+      it 'not change the question' do
+        expect { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }.to_not change(question, :body)
+      end
+  
+      it 'render update' do
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+        expect(response).to render_template :update
+      end
+      
+    end
+
+    context 'not author' do
+      before { login(user_not_author) }
+      it 'not change the question' do
+        expect { patch :update, params: { id: question, question: {title: "new title", body: 'new body'} }, format: :js }.to_not change(question, :body)
+      end
+  
+      it 'render update' do
+        patch :update, params: { id: question, question: {title: "new title", body: 'new body'} }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+  end
 end

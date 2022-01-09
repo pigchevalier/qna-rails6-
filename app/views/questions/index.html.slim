@@ -1,4 +1,7 @@
 h1 Questions
-= render @questions        
+.question-errors
+  = render 'shared/errors', resource: question
+.questions
+  = render @questions       
 
 p= link_to 'Create question', new_question_path
