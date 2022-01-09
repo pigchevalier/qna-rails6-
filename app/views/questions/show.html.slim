@@ -4,12 +4,14 @@ p= question.body
 - if user_signed_in? && current_user.author_of?(question)
   p= link_to 'Delete question', question, method: :delete
 
-= render 'shared/errors', resource: answer
+.answer-errors
+  = render 'shared/errors', resource: answer
+.answers
+  = render question.answers
 
-= render question.answers
-
-= form_with model: [question, answer], url: {action: "create", controller: "answers", question_id: question.id}, method: :post, local: true do |f|
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Create'
+-if user_signed_in?
+  = form_with model: [question, answer], url: {action: "create", controller: "answers", question_id: question.id}, method: :post, local: false do |f|
+    = f.label :body
+    = f.text_area :body
+    = f.submit 'Create'
   

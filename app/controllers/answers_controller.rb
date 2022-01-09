@@ -8,11 +8,14 @@ class AnswersController < ApplicationController
     @answer = question.answers.build(answers_params)
     @answer.user = current_user
 
-    if @answer.save
-      redirect_to @answer.question, notice: 'Your answer successfully created'
-    else
-      question
-      render 'questions/show'
+    @answer.save
+    question
+  end
+
+  def update
+    if current_user.author_of?(answer)
+      answer.update(answers_params)
+      @question = answer.question
     end
   end
 
