@@ -68,12 +68,12 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:question) { create(:question, user: user) }
   
       it 'deletes the question' do
-        expect { delete :destroy, params: { id: question} }.to change(Question, :count).by(-1)
+        expect { delete :destroy, params: { id: question}, format: :js  }.to change(Question, :count).by(-1)
       end
   
-      it 'redirects to index' do
-        delete :destroy, params: { id: question}
-        expect(response).to redirect_to questions_path
+      it 'render delete' do
+        delete :destroy, params: { id: question}, format: :js 
+        expect(response).to render_template :destroy
       end
     end
     context 'Not author' do
@@ -81,12 +81,12 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:question) { create(:question, user: user) }
   
       it 'not deletes the question' do
-        expect { delete :destroy, params: { id: question} }.to_not change(Question, :count)
+        expect { delete :destroy, params: { id: question}, format: :js  }.to_not change(Question, :count)
       end
   
-      it 'redirects to show' do
-        delete :destroy, params: { id: question}
-        expect(response).to redirect_to question
+      it 'render delete' do
+        delete :destroy, params: { id: question}, format: :js 
+        expect(response).to render_template :destroy
       end
     end
   end

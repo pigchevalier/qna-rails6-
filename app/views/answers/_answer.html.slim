@@ -5,5 +5,5 @@ p= answer.body
     = f.label :body, 'Your answer'
     = f.text_area :body
     = f.submit 'Save'
-  = link_to 'Delete answer', answer_path(answer), method: :delete
+  = link_to 'Delete answer', answer_path(answer), remote: true, method: :delete
   
