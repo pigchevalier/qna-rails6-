@@ -37,6 +37,13 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def set_best_answer
+    if current_user.author_of?(question)
+      question.best_answer = Answer.find(params[:best_answer_id])
+      question.save
+    end
+  end
+
   private
 
   def question
@@ -53,5 +60,13 @@ class QuestionsController < ApplicationController
 
   def answers
     @answers ||= question.answers
+    #@answers = []
+    #if question.best_answer.nil?
+    #  @answers = question.answers
+    #else
+    #  @answers.push(question.best_answer)
+    #  question.answers.where.not(id: question.best_answer).each { |answer| @answers.push(answer)}
+    #  @answers
+    #end
   end
 end

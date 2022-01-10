@@ -1,9 +1,13 @@
-p= answer.body
-- if user_signed_in? && current_user.author_of?(answer) && !answer.id.nil?
-  = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"}, local: false do |f|
-    = f.label :body, 'Your answer'
-    = f.text_area :body
-    = f.submit 'Save'
-  = link_to 'Delete answer', answer_path(answer), remote: true, method: :delete
-  
+div[class='answer' id="#{answer.id}"]
+  -if !answer.best_of_question_id.nil?
+    p= 'Best answer'
+  p= answer.body
+  - if user_signed_in? && current_user.author_of?(answer) && !answer.id.nil?
+    = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+    = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"}, local: false do |f|
+      = f.label :body, 'Your answer'
+      = f.text_area :body
+      = f.submit 'Save'
+    = link_to 'Delete answer', answer_path(answer), remote: true, method: :delete
+  - if user_signed_in? && current_user.author_of?(answer.question) && (answer.question.best_answer.nil? || answer.id != answer.question.best_answer.id)
+    = link_to 'Set as best', set_best_answer_questions_path(answer.question, best_answer_id: answer.id, id: answer.question.id), remote: true, data: { action: :set_best_answer }, method: :put  

@@ -4,8 +4,7 @@ p= question.body
 .answer-errors
   = render 'shared/errors', resource: answer
 .answers
-  = render question.answers
-
+  = render question.answers.order(:best_of_question_id)
 -if user_signed_in?
   = form_with model: [question, answer], url: {action: "create", controller: "answers", question_id: question.id}, method: :post, local: false do |f|
     = f.label :body

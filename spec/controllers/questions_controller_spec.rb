@@ -135,4 +135,54 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PUT #set_best_answer' do
+    let!(:question) { create(:question, user: user) }
+    let!(:question_not_author) { create(:question, user: user) }
+    let!(:answer) { create(:answer, question: question) }
+    let!(:answer2) { create(:answer, question: question) }
+
+    context 'author set first best answer' do
+      before { login(user) }
+
+      it 'change the best answer question' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer.id} , format: :js 
+        question.reload
+        expect(question.best_answer.id).to eq(answer.id)
+      end
+  
+      it 'render set_best_answer' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer.id} , format: :js 
+        expect(response).to render_template :set_best_answer
+      end
+    end
+
+    context 'author change best answer' do
+      before { login(user) }
+      it 'change the best answer question' do
+        question.best_answer = answer
+        question.save
+        put :set_best_answer, params: { id: question, best_answer_id: answer2.id} , format: :js 
+        question.reload
+        expect(question.best_answer.id).to eq(answer2.id)
+      end
+  
+      it 'render set_best_answer' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer2.id} , format: :js 
+        expect(response).to render_template :set_best_answer
+      end      
+    end
+
+    context 'not author' do
+      before { login(user_not_author) }
+      it 'not change the best answer question' do
+        expect { put :set_best_answer, params: { id: question, best_answer_id: answer.id} , format: :js  }.to_not change(question, :best_answer)
+      end
+  
+      it 'render set_best_answer' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer2.id} , format: :js 
+        expect(response).to render_template :set_best_answer
+      end
+    end
+  end
 end
