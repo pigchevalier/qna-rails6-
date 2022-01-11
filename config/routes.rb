@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   root to: 'questions#index'
 
   resources :questions do
-    resources :answers, shallow: true, only: [:create, :destroy]
+    collection do
+      put :set_best_answer
+    end
+    resources :answers, shallow: true, only: [:create, :destroy, :update]
   end
 end

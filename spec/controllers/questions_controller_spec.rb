@@ -68,12 +68,12 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:question) { create(:question, user: user) }
   
       it 'deletes the question' do
-        expect { delete :destroy, params: { id: question} }.to change(Question, :count).by(-1)
+        expect { delete :destroy, params: { id: question}, format: :js  }.to change(Question, :count).by(-1)
       end
   
-      it 'redirects to index' do
-        delete :destroy, params: { id: question}
-        expect(response).to redirect_to questions_path
+      it 'render delete' do
+        delete :destroy, params: { id: question}, format: :js 
+        expect(response).to render_template :destroy
       end
     end
     context 'Not author' do
@@ -81,12 +81,107 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:question) { create(:question, user: user) }
   
       it 'not deletes the question' do
-        expect { delete :destroy, params: { id: question} }.to_not change(Question, :count)
+        expect { delete :destroy, params: { id: question}, format: :js  }.to_not change(Question, :count)
       end
   
-      it 'redirects to show' do
-        delete :destroy, params: { id: question}
-        expect(response).to redirect_to question
+      it 'render delete' do
+        delete :destroy, params: { id: question}, format: :js 
+        expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    let!(:question) { create(:question, user: user) }
+
+    context 'author, with valid attributes' do
+      before { login(user) }
+
+      it 'change the question' do
+        patch :update, params: { id: question, question: {title: "new title", body: 'new body'} } , format: :js 
+        question.reload
+        expect(question.title).to eq('new title')
+        expect(question.body).to eq('new body')
+      end
+  
+      it 'render update' do
+        patch :update, params: { id: question, question: {title: "new title", body: 'new body'} }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'author, with invalid attributes' do
+      before { login(user) }
+      it 'not change the question' do
+        expect { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }.to_not change(question, :body)
+      end
+  
+      it 'render update' do
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+        expect(response).to render_template :update
+      end
+      
+    end
+
+    context 'not author' do
+      before { login(user_not_author) }
+      it 'not change the question' do
+        expect { patch :update, params: { id: question, question: {title: "new title", body: 'new body'} }, format: :js }.to_not change(question, :body)
+      end
+  
+      it 'render update' do
+        patch :update, params: { id: question, question: {title: "new title", body: 'new body'} }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+  end
+
+  describe 'PUT #set_best_answer' do
+    let!(:question) { create(:question, user: user) }
+    let!(:question_not_author) { create(:question, user: user) }
+    let!(:answer) { create(:answer, question: question) }
+    let!(:answer2) { create(:answer, question: question) }
+
+    context 'author set first best answer' do
+      before { login(user) }
+
+      it 'change the best answer question' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer.id} , format: :js 
+        question.reload
+        expect(question.best_answer.id).to eq(answer.id)
+      end
+  
+      it 'render set_best_answer' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer.id} , format: :js 
+        expect(response).to render_template :set_best_answer
+      end
+    end
+
+    context 'author change best answer' do
+      before { login(user) }
+      it 'change the best answer question' do
+        question.best_answer = answer
+        question.save
+        put :set_best_answer, params: { id: question, best_answer_id: answer2.id} , format: :js 
+        question.reload
+        expect(question.best_answer.id).to eq(answer2.id)
+      end
+  
+      it 'render set_best_answer' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer2.id} , format: :js 
+        expect(response).to render_template :set_best_answer
+      end      
+    end
+
+    context 'not author' do
+      before { login(user_not_author) }
+      it 'not change the best answer question' do
+        expect { put :set_best_answer, params: { id: question, best_answer_id: answer.id} , format: :js  }.to_not change(question, :best_answer)
+      end
+  
+      it 'render set_best_answer' do
+        put :set_best_answer, params: { id: question, best_answer_id: answer2.id} , format: :js 
+        expect(response).to render_template :set_best_answer
       end
     end
   end

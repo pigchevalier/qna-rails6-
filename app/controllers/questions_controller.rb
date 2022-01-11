@@ -23,12 +23,24 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    if current_user.author_of?(question)
+      question.update(questions_params)
+      @questions = Question.all
+    end
+  end
+
   def destroy
     if current_user.author_of?(question)
       question.destroy
-      redirect_to questions_path, notice: 'Your question successfully deleted'
-    else
-      redirect_to question, alert: "You are not author of this question"
+      @questions = Question.all
+    end
+  end
+
+  def set_best_answer
+    if current_user.author_of?(question)
+      question.best_answer = Answer.find(params[:best_answer_id])
+      question.save
     end
   end
 
@@ -48,5 +60,13 @@ class QuestionsController < ApplicationController
 
   def answers
     @answers ||= question.answers
+    #@answers = []
+    #if question.best_answer.nil?
+    #  @answers = question.answers
+    #else
+    #  @answers.push(question.best_answer)
+    #  question.answers.where.not(id: question.best_answer).each { |answer| @answers.push(answer)}
+    #  @answers
+    #end
   end
 end
