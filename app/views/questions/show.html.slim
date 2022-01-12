@@ -1,6 +1,10 @@
 h1= question.title
 p= question.body
 
+- if question.files.attached?
+  - question.files.each do |file|
+    p= link_to file.filename.to_s, url_for(file)
+
 .answer-errors
   = render 'shared/errors', resource: answer
 .answers
@@ -9,5 +13,7 @@ p= question.body
   = form_with model: [question, answer], url: {action: "create", controller: "answers", question_id: question.id}, method: :post, local: false do |f|
     = f.label :body
     = f.text_area :body
+    = f.label :files
+    = f.file_field :files, multiple: true
     = f.submit 'Create'
   
