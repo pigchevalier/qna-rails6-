@@ -47,11 +47,11 @@ class QuestionsController < ApplicationController
   private
 
   def question
-    @question ||= params[:id] ? Question.find(params[:id]) : Question.new
+    @question ||= params[:id] ? Question.with_attached_files.find(params[:id]) : Question.new
   end
 
   def questions_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 
   def answer
@@ -60,13 +60,5 @@ class QuestionsController < ApplicationController
 
   def answers
     @answers ||= question.answers
-    #@answers = []
-    #if question.best_answer.nil?
-    #  @answers = question.answers
-    #else
-    #  @answers.push(question.best_answer)
-    #  question.answers.where.not(id: question.best_answer).each { |answer| @answers.push(answer)}
-    #  @answers
-    #end
   end
 end
