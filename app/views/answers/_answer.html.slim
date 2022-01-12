@@ -16,3 +16,5 @@ div[class='answer' id="#{answer.id}"]
   - if answer.files.attached?
     - answer.files.each do |file|
       p= link_to file.filename.to_s, url_for(file)
+      - if user_signed_in? && current_user.author_of?(answer)
+        p= link_to 'Remove', delete_file_attachment_question_answers_url(question_id: answer.question, id: answer, file_id: file), method: :delete, remote: true

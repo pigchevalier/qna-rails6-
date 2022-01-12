@@ -185,4 +185,39 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #remove_attached_file' do
+    context 'Author' do
+      let!(:question) { create(:question, user: user) }
+      before do
+        login(user)
+        question.files.attach(io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'rails_helper.rb')
+      end      
+
+      it 'deletes the attached file' do
+        expect { delete :delete_file_attachment, params: { id: question, file_id: question.files.first}, format: :js  }.to change(question.files, :count).by(-1)
+      end
+  
+      it 'render delete_file_attachment' do
+        delete :delete_file_attachment, params: { id: question, file_id: question.files.first}, format: :js   
+        expect(response).to render_template :delete_file_attachment
+      end
+    end
+    context 'Not author' do
+      let!(:question) { create(:question, user: user) }
+      before do
+        login(user_not_author)
+        question.files.attach(io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'rails_helper.rb')
+      end
+  
+      it 'not deletes the question' do
+        expect { delete :delete_file_attachment, params: { id: question, file_id: question.files.first}, format: :js  }.to_not change(question.files, :count)
+      end
+  
+      it 'render delete_file_attachment' do
+        delete :delete_file_attachment, params: { id: question, file_id: question.files.first}, format: :js   
+        expect(response).to render_template :delete_file_attachment
+      end
+    end
+  end
 end
