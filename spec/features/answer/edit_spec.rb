@@ -46,6 +46,23 @@ feature 'User can edit his answer', %q{
 
       expect(page).to_not have_link 'Edit'
     end
+
+    scenario 'add attached files to his answer' do
+      sign_in(answer.user)
+      visit question_path(id: answer.question)
+
+      click_on 'Edit'
+  
+      within '.answers' do
+        fill_in 'Your answer', with: 'edited_answer_text'
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+        click_on 'Save'
+      end
+      
+      expect(page).to have_link "rails_helper.rb"
+      expect(page).to have_link "spec_helper.rb"
+    end
   end
 
   scenario "Unauthenticated user can not edit an answer", js: true do
