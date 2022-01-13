@@ -5,12 +5,10 @@ Rails.application.routes.draw do
   resources :questions do
     collection do
       put :set_best_answer
-      delete :delete_file_attachment
     end
     resources :answers, shallow: true, only: [:create, :destroy, :update] do
-      collection do
-        delete :delete_file_attachment
-      end
     end
   end
+
+  delete 'attachments/:file_id', to: 'attachments#destroy', as: :attachment_destroy
 end

@@ -1,0 +1,5 @@
+<% if @file.record.class == Answer %>
+  $('.answers').html('<%= j render @question.answers %>');
+<% else @file.record.class == Question %>
+  $('.questions').html('<%= j render @questions %>');
+<% end %>
