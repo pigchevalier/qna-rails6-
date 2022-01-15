@@ -8,6 +8,7 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("jquery")
 require("channels")
+require("@nathanvda/cocoon")
 require("packs/answers")
 require("packs/questions")
 

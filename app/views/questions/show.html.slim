@@ -1,6 +1,16 @@
 h1= question.title
 p= question.body
 
+.question-links
+    -if question.links.any?
+      p Links:
+      ul
+        - question.links.each do |link|
+          li
+            = link_to link.name, link.url
+            p
+              script src= link.gist
+
 - if question.files.attached?
   - question.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)
@@ -15,5 +25,13 @@ p= question.body
     = f.text_area :body
     = f.label :files
     = f.file_field :files, multiple: true
-    = f.submit 'Create'
+
+    p Links:
+    p
+      =f.fields_for :links do |l|
+        = render 'link_fields', f: link
+      .links
+        =link_to_add_association 'add link', f, :links
+
+    p= f.submit 'Create'
   
