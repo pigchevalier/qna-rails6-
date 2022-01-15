@@ -1,0 +1,5 @@
+<% if @link.linkable.class == Answer %>
+  $('.answers').html('<%= j render @question.answers %>');
+<% else @link.linkable.class == Question %>
+  $('.questions').html('<%= j render @questions %>');
+<% end %>

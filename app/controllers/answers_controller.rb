@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
 
-  def create
+  def create 
     @answer = question.answers.build(answers_params)
     @answer.user = current_user
 
@@ -37,6 +37,6 @@ class AnswersController < ApplicationController
   end 
 
   def answers_params
-    params.require(:answer).permit(:body, files: [])
+    params.require(:answer).permit(:body, files: [], links_attributes: [:name, :url])
   end
 end
