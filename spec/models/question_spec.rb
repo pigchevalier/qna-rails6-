@@ -5,6 +5,7 @@ RSpec.describe Question, type: :model do
     it { should have_many(:answers).dependent(:destroy) }
     it { should have_one(:best_answer).with_foreign_key('best_of_question_id').class_name('Answer').dependent(:nullify) }
     it { should have_many(:links).dependent(:destroy) }
+    it { should have_many(:rewards).dependent(:destroy) }
   end
 
   describe 'validations' do
@@ -17,4 +18,5 @@ RSpec.describe Question, type: :model do
   end  
 
   it { should accept_nested_attributes_for :links }
+  it { should accept_nested_attributes_for :rewards }
 end
