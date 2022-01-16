@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   describe 'associations' do
     it { should belong_to(:question) }
+    it { should have_one(:reward).dependent(:nullify).required(false) }
     it { should have_many(:links).dependent(:destroy) }
   end
 

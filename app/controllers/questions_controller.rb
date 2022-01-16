@@ -13,6 +13,7 @@ class QuestionsController < ApplicationController
 
   def new
     question.links.new
+    question.rewards.new
   end
 
   def create
@@ -43,6 +44,12 @@ class QuestionsController < ApplicationController
     if current_user.author_of?(question)
       question.best_answer = Answer.find(params[:best_answer_id])
       question.save
+      if question.rewards.present?
+        question.rewards.each do |reward|
+          reward.answer = question.best_answer
+          reward.save
+        end
+      end
     end
   end
 
@@ -53,7 +60,7 @@ class QuestionsController < ApplicationController
   end
 
   def questions_params
-    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url], rewards_attributes: [:name, :image])
   end
 
   def answer

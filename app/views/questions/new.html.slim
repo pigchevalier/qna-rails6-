@@ -16,4 +16,15 @@
     .links
       = link_to_add_association 'add link', f, :links
 
+  p Reward:
+  .reward
+    p
+      =f.fields_for :rewards do |r|
+        p
+          =r.label :name
+          =r.text_field :name
+        p
+          =r.label :image
+          =r.text_field :image
+
   p= f.submit 'Create'
