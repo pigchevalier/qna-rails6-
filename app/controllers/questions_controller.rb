@@ -42,14 +42,8 @@ class QuestionsController < ApplicationController
 
   def set_best_answer
     if current_user.author_of?(question)
-      question.best_answer = Answer.find(params[:best_answer_id])
-      question.save
-      if question.rewards.present?
-        question.rewards.each do |reward|
-          reward.answer = question.best_answer
-          reward.save
-        end
-      end
+      question.set_best_answer(params[:best_answer_id], current_user)
+      
     end
   end
 

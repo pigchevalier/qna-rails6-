@@ -7,7 +7,7 @@ feature 'User can look rewards', %q{
 } do
   let!(:user) { create(:user) }
   let!(:answer) { create(:answer, user: user)}
-  let!(:reward) { create(:reward, answer: answer) }
+  let!(:reward) { create(:reward, answer: answer, user: user) }
 
   scenario 'user browse rewards' do  
     sign_in(user)  

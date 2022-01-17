@@ -4,7 +4,7 @@ RSpec.describe RewardsController, type: :controller do
   describe 'GET #index' do
     let!(:user) { create(:user) }
     let!(:answer) { create(:answer, user: user)}
-    let!(:rewards) { create_list(:reward, 5, answer: answer) }
+    let!(:rewards) { create_list(:reward, 5, answer: answer, user: user) }
 
     before do
       login(user)

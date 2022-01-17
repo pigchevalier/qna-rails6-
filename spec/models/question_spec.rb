@@ -19,4 +19,15 @@ RSpec.describe Question, type: :model do
 
   it { should accept_nested_attributes_for :links }
   it { should accept_nested_attributes_for :rewards }
+
+  let!(:user) { create(:user) }
+  let!(:answer) { create(:answer, user: user)}
+  let!(:reward) { create(:reward, answer: answer, user: user) }
+
+  it 'set best answer' do
+    answer.question.set_best_answer(answer.id, user)
+    expect(answer.question.best_answer).to eq(answer)
+    expect(user.rewards.count).to be(1)
+    expect(answer.reward.user).to be(user)
+  end
 end
