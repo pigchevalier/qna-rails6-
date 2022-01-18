@@ -14,11 +14,9 @@ class Question < ApplicationRecord
 
   def set_best_answer(best_answer_id, current_user)
     Question.transaction do
-      self.update(best_answer: Answer.find(best_answer_id))
+      self.update!(best_answer: Answer.find(best_answer_id))
       if self.rewards.present?
-        self.rewards.each do |reward|
-          reward.update(answer: self.best_answer, user: current_user)
-        end
+        self.rewards.update_all!(answer: self.best_answer, user: current_user)
       end
     end
   end
