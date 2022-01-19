@@ -36,3 +36,5 @@ div[class='answer' id="#{answer.id}"]
       p= link_to file.filename.to_s, url_for(file)
       - if user_signed_in? && current_user.author_of?(answer)
         p= link_to 'Remove', attachment_destroy_url( file_id: file), method: :delete, remote: true
+
+  =render 'votes/vote', obj: answer    

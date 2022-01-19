@@ -30,4 +30,6 @@ RSpec.describe Question, type: :model do
     expect(user.rewards.count).to be(1)
     expect(answer.reward.user).to be(user)
   end
+
+  it_behaves_like 'voteable'
 end
