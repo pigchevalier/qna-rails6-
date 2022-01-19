@@ -37,3 +37,4 @@ p= question.body
 .rewards
   -if question.rewards.any?
     =render question.rewards
+=render 'votes/vote', obj: question

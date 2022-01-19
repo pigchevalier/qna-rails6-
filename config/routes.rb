@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   end
 
   resources :rewards, only: [:index]
+  resources :votes, only: [:create, :destroy]
 
   delete 'attachments/:file_id', to: 'attachments#destroy', as: :attachment_destroy
   delete 'links/:id', to: 'links#destroy', as: :link_destroy

@@ -1,0 +1,15 @@
+.vote
+  -if user_signed_in? && !current_user.author_of?(obj)
+    .div[class='del-vote-link' id="#{obj.id}"]
+    -if obj.current_user_vote?(current_user)      
+        p= link_to 'Unvote', vote_path(obj.current_user_vote(current_user)), method: :delete, remote: true, id: "#{obj.id}", class: 'del-vote'
+    -else
+      p= link_to 'Vote +', votes_path(vote: {value: 1, voteable_id: obj, voteable_type: obj.class}), method: :post, remote: true, class: 'new-vote',id: "#{obj.id}"
+      p= link_to 'Vote -', votes_path(vote: {value: -1, voteable_id: obj, voteable_type: obj.class}), method: :post, remote: true, class: 'new-vote',id: "#{obj.id}"
+  div[class='vote-errors' id="#{obj.id}"]
+    = render 'shared/errors', resource: obj
+div[class='rating' id="#{obj.id}"]
+  p
+    = 'Rating: '
+    = obj.rating
+

@@ -1,6 +1,8 @@
 class Question < ApplicationRecord
-  has_many :answers, dependent: :destroy
+  include Voteable
+
   belongs_to :user
+  has_many :answers, dependent: :destroy
   has_one :best_answer, foreign_key: :best_of_question_id, class_name: 'Answer', dependent: :nullify
   has_many :links, dependent: :destroy, as: :linkable
   has_many :rewards, dependent: :destroy
