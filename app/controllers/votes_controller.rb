@@ -1,20 +1,16 @@
 class VotesController < ApplicationController
   include Serialized
+  include ResourceFinder
 
   before_action :authenticate_user!
 
   def create
-    obj_klass = params.dig(:vote, :voteable_type)
-    if obj_klass == 'Answer'    
-      obj = Answer.find(params.dig(:vote, :voteable_id))
-    elsif obj_klass == 'Question'
-      obj = Question.find(params.dig(:vote, :voteable_id))
-    end
-    if !current_user.author_of?(obj)
+    @obj = parentable
+    if !current_user.author_of?(@obj)
       @vote = current_user.votes.build(votes_params)
       respond_to do |format|
         if @vote.save
-          format.json { render_json([obj.rating, @vote.id]) }
+          format.json { render_json([@obj.rating, @vote.id]) }
         else
           format.json { render_errors(@vote)}
         end
@@ -24,7 +20,6 @@ class VotesController < ApplicationController
 
   def destroy 
     @vote = Vote.find(params[:id])   
-    
     if !current_user.author_of?(@vote.voteable) 
       obj = @vote.voteable
       respond_to do |format|
@@ -40,6 +35,10 @@ class VotesController < ApplicationController
   private
 
   def votes_params
-    params.require(:vote).permit(:value, :voteable_id, :voteable_type)
+    if params[:mark] == '+'
+      {value: 1, voteable_id: @obj.id, voteable_type: @obj.class}
+    elsif params[:mark] == '-'
+      {value: -1, voteable_id: @obj.id, voteable_type: @obj.class}
+    end
   end
 end

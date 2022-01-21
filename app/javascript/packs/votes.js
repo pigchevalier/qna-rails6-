@@ -11,7 +11,7 @@ $(document).on('turbolinks:load', function(){
     .on('ajax:success', '.del-vote', function(e) {
       let rating = e.detail[0];
       let id = $(this).attr('id')
-      $('#'+id+'.del-vote-link').html('');
+      $('#'+id+'.del-vote').html('');
       $('#'+id+'.new-vote').removeClass('hidden');
       $('#'+id+'.rating').html('<p>' + 'Rating: ' + rating + '</p>');
     })
