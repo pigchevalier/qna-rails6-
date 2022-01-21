@@ -10,11 +10,11 @@ RSpec.describe VotesController, type: :controller do
       end      
 
       it 'create the vote' do
-        expect { post :create, params: {vote:{ value: 1, voteable_id: question.id, voteable_type: question.class}}, format: :json }.to change(question.votes, :count).by(1)
+        expect { post :create, params: {mark: '+', question_id: question.id}, format: :json }.to change(question.votes, :count).by(1)
       end
   
       it 'responds with json' do
-        post :create, params: {vote:{ value: 1, voteable_id: question.id, voteable_type: question.class}}, format: :json    
+        post :create, params: {mark: '+', question_id: question.id}, format: :json    
         response.body.should == [question.rating, question.votes.first.id].to_json
       end
     end
@@ -24,7 +24,7 @@ RSpec.describe VotesController, type: :controller do
       end
   
       it 'not create the vote' do
-        expect { post :create, params: {vote:{ value: 1, voteable_id: question.id, voteable_type: question.class}}, format: :json   }.to_not change(question.votes, :count)
+        expect { post :create, params: {mark: '+', question_id: question.id}, format: :json   }.to_not change(question.votes, :count)
       end
     end
   end
