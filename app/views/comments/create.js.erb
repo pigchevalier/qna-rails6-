@@ -1,0 +1,8 @@
+$('.comment-errors').html('<%= render 'shared/errors', resource: @comment %>');
+<% if !@comment.errors.present? %>
+  <% if @comment.commenteable.class == Answer %>
+    $('.answers #<%=@obj.id%>.answer .comments').html('<%= j render partial: "comment", locals: {obj: @obj} %>');
+  <% else @comment.commenteable.class == Question %>
+    $("#<%=@obj.id%>.question .comments").html('<%= j render partial: "comment", locals: {obj: @obj} %>');
+  <% end %>
+<% end %>

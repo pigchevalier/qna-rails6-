@@ -7,6 +7,7 @@ feature 'User can create answer', %q{
 } do
   
   given(:question) { create(:question) }
+  given(:user) { create(:user) }
 
   describe 'Authenticated user', js: true do
     background do
@@ -47,5 +48,31 @@ feature 'User can create answer', %q{
     visit question_path(id: question)
     
     expect(page).to_not have_button 'Create'
+  end
+
+  describe 'multiple sessions' do
+    scenario "answer appear on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(id: question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(id: question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Body', with: 'answer_text'
+        click_button 'Create'
+
+        within '.answers' do
+          expect(page).to have_content 'answer_text'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'answer_text'
+      end
+    end
   end
 end

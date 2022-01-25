@@ -38,3 +38,6 @@ div[class='answer' id="#{answer.id}"]
         p= link_to 'Remove', attachment_destroy_url( file_id: file), method: :delete, remote: true
 
   =render 'votes/vote', obj: answer    
+
+  =render 'comments/comment', obj: answer
+           

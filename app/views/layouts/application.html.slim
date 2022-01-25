@@ -5,10 +5,13 @@ html
     meta name="viewport" content="width=device-width,initial-scale=1"
     = csrf_meta_tags 
     = csp_meta_tag
+    = action_cable_meta_tag
+    = Gon::Base.render_data
     
     = stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload"
 
     = javascript_pack_tag "application", "data-turbo-track": "reload"
+
 
   body
     - if user_signed_in?

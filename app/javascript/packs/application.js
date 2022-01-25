@@ -12,6 +12,13 @@ require("@nathanvda/cocoon")
 require("packs/answers")
 require("packs/questions")
 require("packs/votes")
+require("packs/comments")
+require("templates/question.html.hbs")
+require("templates/answer.html.hbs")
+require("templates/comment.html.hbs")
+require('handlebars')
+require('handlebars-helpers')
+
 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
