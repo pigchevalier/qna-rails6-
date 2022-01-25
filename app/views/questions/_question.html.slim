@@ -10,7 +10,8 @@ p= question.body
             =link_to link.name, link.url
             p 
               script src=link.gist
-            =link_to 'Remove', link_destroy_url( id: link ), method: :delete, remote: true
+            - if user_signed_in? && current_user.author_of?(question)
+              =link_to 'Remove', link_destroy_url( id: link ), method: :delete, remote: true
 
 - if user_signed_in? && current_user.author_of?(question)
   = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
@@ -38,3 +39,4 @@ p= question.body
   -if question.rewards.any?
     =render question.rewards
 =render 'votes/vote', obj: question
+

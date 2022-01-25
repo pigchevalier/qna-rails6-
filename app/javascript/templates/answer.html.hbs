@@ -1,0 +1,55 @@
+<div class="answer" id={{{answer/id}}}>
+  <p>{{{answer/body}}}</p>
+  <div class="links">
+    {{#if links/length}}
+      <p>Links :</p>
+      <ul>
+      {{#each links}}
+        <li>
+          <a href="{{{url}}}">{{{name}}}</a>
+          {{#if author}}
+            <a data-remote="true" rel="nofollow" data-method="delete" href="http  ://localhost:3000/links/{{{link/id}}}">Remove</a>
+          {{/if}}
+        </li> 
+      {{/each}}
+      <ul>
+    {{/if}}
+  </div>
+  {{#if author}}
+    <a class="edit-answer-link" data-answer-id={{{answer/id}}} href="#">Edit</a>
+    <form class="hidden" id="edit-answer-{{{answer/id}}}" enctype="multipart/form-data" action="/answers/{{{answer/id}}}" accept-charset="UTF-8" data-remote="true" method="post">
+      <input type="hidden" name="_method" value="patch">
+      <label for="answer_body">Your answer</label>
+      <textarea name="answer[body]" id="answer_body">{{{answer/body}}}</textarea>
+      <label for="answer_files">Files</label><input multiple="multiple"   data-direct-upload-url="http://localhost:3000/rails/active_storage/ direct_uploads" type="file" name="answer[files][]" id="answer_files">
+      <p>Links:</p>
+      <p></p>
+      <div class="links">
+        <a class="add_fields" data-association="link" data-associations="links"   data-association-insertion-template="<div class=&quot;nested-fields&quot; ><div class=&quot;field&quot;><p><label for=&quot; answer_links_attributes_new_links_name&quot;>Link name</label><input   type=&quot;text&quot; name=&quot;answer[  links_attributes][new_links][name]&quot; id=&quot;  answer_links_attributes_new_links_name&quot; /></p></div><div class=&quot ;field&quot;><p><label for=&quot;answer_links_attributes_new_links_url&  quot;>Url</label><input type=&quot;text&quot; name=&quot;answer[  links_attributes][new_links][url]&quot; id=&quot; answer_links_attributes_new_links_url&quot; /></p></div><input value=& quot;false&quot; type=&quot;hidden&quot; name=&quot;answer[  links_attributes][new_links][_destroy]&quot; id=&quot;  answer_links_attributes_new_links__destroy&quot; /><a class=&quot;  remove_fields dynamic&quot; href=&quot;#&quot;>remove link</a></div>"   href="#">add link</a>
+      </div>
+      <p></p>
+      <input type="submit" name="commit" value="Save" data-disable-with="Save">
+    </form>
+    <a data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{{answer/id}}}">Delete answer</a>
+  
+    <a data-action="set_best_answer" data-remote="true" rel="nofollow" data-method="put" href="/questions/set_best_answer.{{{question/id}}}?best_answer_id={{{answer/id}}}&amp;id={{{question/id}}}">Set as best</a>
+  {{/if}}
+    <div class="vote">
+      <div class="div del-vote-link" id="{{{answer/id}}}"></div>
+      {{#if vote}}
+        <p><a class="new-vote" id="{{{answer/id}}}" data-remote="true" rel="nofollow" data-method="post" href="/questions/{{{answer/id}}}/votes?mark=%2B">Vote +</a></p>
+        <p><a class="new-vote" id="{{{answer/id}}}" data-remote="true" rel="nofollow" data-method="post" href="/questions/{{{answer/id}}}/votes?mark=-">Vote -</a></p>
+      {{/if}}
+      <div class="vote-errors" id="{{{answer/id}}}"></div>
+    </div>
+    <div class="rating" id="{{{answer/id}}}">
+      <p>Rating: {{{rating}}}</p>
+    </div>
+    <div class="comments">
+      <form action="/answers/{{{answer/id}}}/comments?id={{{answer/id}}}" accept-charset="UTF-8" data-remote="true" method="post">
+        <label for="body">Your comment</label>
+        <textarea name="body" id="body"></textarea><input type="submit" name="commit" value="Save" data-disable-with="Save">
+      </form>
+    </div>
+  </div>
+

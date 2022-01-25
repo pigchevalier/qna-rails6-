@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
 
+  after_action :publish_question, only: [:create]
+
   def index
     @questions = Question.all
   end
@@ -63,5 +65,11 @@ class QuestionsController < ApplicationController
 
   def answers
     @answers ||= question.answers
+  end
+
+  def publish_question
+    return if @question.errors.any?
+    data = {question: @question, links: @question.links, rewards: @question.rewards, rating: @question.rating}
+    ActionCable.server.broadcast 'questions', data
   end
 end

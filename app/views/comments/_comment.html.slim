@@ -1,0 +1,16 @@
+.comments
+  .comment-errors
+      = render 'shared/errors', resource: obj.comments.first
+  -if obj.comments.any?    
+    p Comments:
+    .comments-body
+      ul
+        -obj.comments.each do |comment|          
+          li 
+            p= comment.body 
+  
+  -if user_signed_in?
+    = form_with model: @comment, url: polymorphic_path([obj, Comment], id: "#{obj.id}" ), local: false do |f|
+      = f.label :body, 'Your comment'
+      = f.text_area :body
+      = f.submit 'Save comment'

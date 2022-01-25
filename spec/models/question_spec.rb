@@ -6,6 +6,7 @@ RSpec.describe Question, type: :model do
     it { should have_one(:best_answer).with_foreign_key('best_of_question_id').class_name('Answer').dependent(:nullify) }
     it { should have_many(:links).dependent(:destroy) }
     it { should have_many(:rewards).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
   end
 
   describe 'validations' do

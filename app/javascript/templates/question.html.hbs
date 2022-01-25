@@ -1,0 +1,71 @@
+<p> <a href='/questions/{{{question/id}}}'>{{{question/title}}}</a> </p>
+<p> {{{question/body}}} </p>
+<div class="links">
+  {{#if links/length}}
+    <p>Links :</p>
+    <ul>
+    {{#each links}}
+      <li>
+        <a href="{{{url}}}">{{{name}}}</a>
+        {{#if author}}
+          <a data-remote="true" rel="nofollow" data-method="delete" href="http://localhost:3000/links/{{{link/id}}}">Remove</a>
+        {{/if}}
+      </li> 
+    {{/each}}
+    <ul>
+  {{/if}}
+</div>
+{{#if author}}
+  <a class="edit-question-link" data-question-id="{{{question/id}}}" href="#">Edit</a>
+  <form class="hidden" id="edit-question-{{{question/id}}}" enctype="multipart/form-data" action="/questions/{{{question/id}}}" accept-charset="UTF-8" data-remote="true" method="post">
+    <input type="hidden" name="_method" value="patch">
+    <label for="question_title">Title of question</label>
+    <input type="text" value={{{question/title}}} name="question[title]" id="question_title">
+    <label for="question_body">Your question</label>
+    <textarea name="question[body]" id="question_body">{{{question/body}}}</textarea>
+    <label for="question_files">Files</label>
+    <input multiple="multiple" data-direct-upload-url="http://[::1]:3000/rails/active_storage/direct_uploads" type="file" name="question[files][]" id="question_files">
+    <p>Links:</p>
+    <p></p>
+    <div class="nested-fields">
+      <div class="field">
+        <p><label for="question_links_attributes_0_name">Link name</label>
+        <input type="text" value="{{{links/name}}}" name="question[links_attributes][0][name]" id="question_links_attributes_0_name">
+        </p>
+      </div>
+      <div class="field">
+        <p><label for="question_links_attributes_0_url">Url</label>
+        <input type="text" value="{{{links/url}}}" name="question[links_attributes][0][url]" id="question_links_attributes_0_url"></p>
+      </div>
+      <input value="false" type="hidden" name="question[links_attributes][0][_destroy]" id="question_links_attributes_0__destroy">
+      <a class="remove_fields existing" href="#">remove link</a>
+    </div>
+    <input type="hidden" value={{{link/id}}} name="question[links_attributes][0][id]" id="question_links_attributes_0_id">
+    <div class="links">
+      <a class="add_fields" data-association="link" data-associations="links" data-association-insertion-template="<div class=&quot;nested-fields&quot;><div class=&quot;field&quot;><p><label for=&quot;question_links_attributes_new_links_name&quot;>Link name</label><input type=&quot;text&quot; name=&quot;question[links_attributes][new_links][name]&quot; id=&quot;question_links_attributes_new_links_name&quot; /></p></div><div class=&quot;field&quot;><p><label for=&quot;question_links_attributes_new_links_url&quot;>Url</label><input type=&quot;text&quot; name=&quot;question[links_attributes][new_links][url]&quot; id=&quot;question_links_attributes_new_links_url&quot; /></p></div><input value=&quot;false&quot; type=&quot;hidden&quot; name=&quot;question[links_attributes][new_links][_destroy]&quot; id=&quot;question_links_attributes_new_links__destroy&quot; /><a class=&quot;remove_fields dynamic&quot; href=&quot;#&quot;>remove link</a></div>" href="#">add link</a>
+      </div>
+      <p></p>
+      <input type="submit" name="commit" value="Save" data-disable-with="Save">
+  </form>
+  <a data-remote="true" rel="nofollow" data-method="delete" href="/questions/{{{question/id}}}">Delete question</a>
+{{/if}}
+
+<div class="rewards">
+  {{#if rewards/length}}
+    <p>{{{question/title}}}</p>
+    <p>{{{rewards/name}}}</p>
+    <img src={{{rewards/image}}}>
+  {{/if}}
+</div>
+<div class="vote">
+  <div class="div del-vote-link" id="{{{question/id}}}"></div>
+  {{#if vote}}
+    <p><a class="new-vote" id="{{{question/id}}}" data-remote="true" rel="nofollow" data-method="post" href="/questions/{{{question/id}}}/votes?mark=%2B">Vote +</a></p>
+    <p><a class="new-vote" id="{{{question/id}}}" data-remote="true" rel="nofollow" data-method="post" href="/questions/{{{question/id}}}/votes?mark=-">Vote -</a></p>
+  {{/if}}
+  <div class="vote-errors" id="{{{question/id}}}"></div>
+</div>
+<div class="rating" id="{{{question/id}}}">
+  <p>Rating: {{{rating}}}</p>
+</div>
+

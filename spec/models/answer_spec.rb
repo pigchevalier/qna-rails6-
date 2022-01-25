@@ -5,6 +5,7 @@ RSpec.describe Answer, type: :model do
     it { should belong_to(:question) }
     it { should have_one(:reward).dependent(:nullify).required(false) }
     it { should have_many(:links).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
   end
 
   describe 'validations' do

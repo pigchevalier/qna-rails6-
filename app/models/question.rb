@@ -6,6 +6,7 @@ class Question < ApplicationRecord
   has_one :best_answer, foreign_key: :best_of_question_id, class_name: 'Answer', dependent: :nullify
   has_many :links, dependent: :destroy, as: :linkable
   has_many :rewards, dependent: :destroy
+  has_many :comments, dependent: :destroy, as: :commenteable
 
   has_many_attached :files
 

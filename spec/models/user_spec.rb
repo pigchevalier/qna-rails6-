@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:questions).dependent(:destroy) }
     it { should have_many(:rewards).dependent(:nullify) }
     it { should have_many(:votes).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
   end
 
   let(:user_not_author) { create(:user, email: '2@2.com') }
