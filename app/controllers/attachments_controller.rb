@@ -1,9 +1,11 @@
 class AttachmentsController < ApplicationController
   before_action :authenticate_user!
 
+  skip_authorization_check
+
   def destroy
-    @file = ActiveStorage::Attachment.find(params[:file_id])
-    if current_user.author_of?(@file.record)      
+    @file = ActiveStorage::Attachment.find(params[:file_id])      
+    if can?(:update, @file.record)
       @file.purge
     end
     if @file.record.class == Answer

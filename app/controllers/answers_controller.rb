@@ -6,6 +6,8 @@ class AnswersController < ApplicationController
 
   after_action :publish_answer, only: [:create]
 
+  authorize_resource
+
   def create 
     @answer = question.answers.build(answers_params)
     @answer.user = current_user
@@ -15,15 +17,13 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(answer)
-      answer.update(answers_params)
-      @question = answer.question
-    end
+    answer.update(answers_params)
+    @question = answer.question
   end
 
   def destroy
-    if current_user.author_of?(answer)
-      @question = answer.question
+    @question = answer.question
+    if can?(:destroy, answer)
       answer.destroy
     end
   end

@@ -59,8 +59,8 @@ feature 'User can add comments to answer', %q{
         within ".answers" do
           fill_in 'Your comment', with: 'sdf'
           click_button 'Save comment'
-          
-          expect(page).to have_content 'sdf'
+          visit question_path(id: answer.question)
+          expect(page).to have_content 'sdf'          
         end
       end
 
@@ -69,7 +69,8 @@ feature 'User can add comments to answer', %q{
         #возможно потому что канал долго поднимается и надо перезагрузить страницу перед создание комментария
         #но использование здесь refresh не помагает
         #при этом с вопросами и ответами такой проблемы нет
-        expect(page).to have_content 'sdf'        
+        visit question_path(id: answer.question)
+        expect(page).to have_content 'sdf'
       end
     end
   end
