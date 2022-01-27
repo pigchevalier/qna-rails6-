@@ -4,9 +4,11 @@ class VotesController < ApplicationController
 
   before_action :authenticate_user!
 
+  authorize_resource
+
   def create
     @obj = parentable
-    if !current_user.author_of?(@obj)
+    if !can?(:update, @obj)
       @vote = current_user.votes.build(votes_params)
       respond_to do |format|
         if @vote.save
@@ -20,8 +22,8 @@ class VotesController < ApplicationController
 
   def destroy 
     @vote = Vote.find(params[:id])   
-    if !current_user.author_of?(@vote.voteable) 
-      obj = @vote.voteable
+    obj = @vote.voteable
+    if can?(:destroy, @vote)
       respond_to do |format|
         if @vote.destroy
           format.json { render_json(obj.rating) }

@@ -10,10 +10,10 @@ p= question.body
             =link_to link.name, link.url
             p 
               script src=link.gist
-            - if user_signed_in? && current_user.author_of?(question)
+            - if can?(:update, question)
               =link_to 'Remove', link_destroy_url( id: link ), method: :delete, remote: true
 
-- if user_signed_in? && current_user.author_of?(question)
+- if can?(:update, question)
   = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
   = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}"}, local: false do |f|
     = f.label :title, 'Title of question'
@@ -29,11 +29,12 @@ p= question.body
       .links
         = link_to_add_association 'add link', f, :links
     = f.submit 'Save'
+- if can?(:destroy, question)
   = link_to 'Delete question', question_path(question), remote: true, method: :delete
 - if question.files.attached?
   - question.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)
-    - if user_signed_in? && current_user.author_of?(question)
+    - if can?(:update, question)
       p= link_to 'Remove', attachment_destroy_url(file_id: file), method: :delete, remote: true
 .rewards
   -if question.rewards.any?

@@ -7,6 +7,8 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
+  authorize_resource
+
   def index
     @questions = Question.all
   end
@@ -29,24 +31,19 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(question)
-      question.update(questions_params)
-      @questions = Question.all
-    end
+    question.update(questions_params)
+    @questions = Question.all
   end
 
   def destroy
-    if current_user.author_of?(question)
+    if can?(:destroy, question)
       question.destroy
-      @questions = Question.all
     end
+    @questions = Question.all   
   end
 
   def set_best_answer
-    if current_user.author_of?(question)
-      question.set_best_answer(params[:best_answer_id], current_user)
-      
-    end
+    question.set_best_answer(params[:best_answer_id], current_user)     
   end
 
   private

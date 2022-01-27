@@ -61,7 +61,8 @@ feature 'User can add comments to question', %q{
         #возможно потому что канал долго поднимается и надо перезагрузить страницу перед создание комментария
         #но использование здесь refresh не помагает
         #при этом с вопросами и ответами такой проблемы нет
-        expect(page).to have_content 'text'
+        visit question_path(id: question)
+        expect(page).to have_content 'text'        
       end
     end
   end

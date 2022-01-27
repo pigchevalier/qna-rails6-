@@ -1,7 +1,7 @@
 .vote
-  -if user_signed_in? && !current_user.author_of?(obj)
+  -if can?(:create, Vote) && !can?(:update, obj)
     .div[class='del-vote-link' id="#{obj.id}"]
-    -if current_user.vote?(obj)      
+    -if current_user.vote?(obj) && can?(:destroy, current_user.vote(obj))     
         p= link_to 'Unvote', vote_path(current_user.vote(obj)), method: :delete, remote: true, id: "#{obj.id}", class: 'del-vote'
         p= link_to 'Vote +', polymorphic_path([obj, Vote],mark: '+'), method: :post, remote: true, class: 'new-vote hidden',id: "#{obj.id}"
         p= link_to 'Vote -', polymorphic_path([obj, Vote],mark: '-'), method: :post, remote: true, class: 'new-vote hidden',id: "#{obj.id}"

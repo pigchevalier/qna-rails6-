@@ -9,7 +9,7 @@
           li 
             p= comment.body 
   
-  -if user_signed_in?
+  -if can?(:create, Comment)
     = form_with model: @comment, url: polymorphic_path([obj, Comment], id: "#{obj.id}" ), local: false do |f|
       = f.label :body, 'Your comment'
       = f.text_area :body

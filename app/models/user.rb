@@ -9,10 +9,6 @@ class User < ApplicationRecord
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
 
-  def author_of?(object)
-    id == object.user_id
-  end
-
   def vote(object)
     votes.find_by(voteable: object)
   end
