@@ -8,14 +8,14 @@ class VotesController < ApplicationController
 
   def create
     @obj = parentable
-    if !can?(:update, @obj)
-      @vote = current_user.votes.build(votes_params)
-      respond_to do |format|
-        if @vote.save
-          format.json { render_json([@obj.rating, @vote.id]) }
-        else
-          format.json { render_errors(@vote)}
-        end
+    authorize! :create, Vote.new, @obj
+
+    @vote = current_user.votes.build(votes_params)
+    respond_to do |format|
+      if @vote.save
+        format.json { render_json([@obj.rating, @vote.id]) }
+      else
+        format.json { render_errors(@vote)}
       end
     end
   end

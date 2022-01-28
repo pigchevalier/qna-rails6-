@@ -17,6 +17,7 @@ $(document).on('turbolinks:load', function(){
     })
     .on('ajax:error', '.del-vote', function(e) {
       let errors = e.detail[0];
+      let id = $(this).attr('id')
       $('#'+id+'.vote-errors').html('');
 
       $.each(errors, function(index, value){
@@ -25,6 +26,7 @@ $(document).on('turbolinks:load', function(){
     })
     .on('ajax:error', '.new-vote', function(e) {
       let errors = e.detail[0];
+      let id = $(this).attr('id')
       $('#'+id+'.vote-errors').html('');
 
       $.each(errors, function(index, value){
