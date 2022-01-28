@@ -1,5 +1,5 @@
 .vote
-  -if can?(:create, Vote) && !can?(:update, obj)
+  -if can?(:create, Vote.new, obj)
     .div[class='del-vote-link' id="#{obj.id}"]
     -if current_user.vote?(obj) && can?(:destroy, current_user.vote(obj))     
         p= link_to 'Unvote', vote_path(current_user.vote(obj)), method: :delete, remote: true, id: "#{obj.id}", class: 'del-vote'

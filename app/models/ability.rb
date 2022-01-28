@@ -18,7 +18,10 @@ class Ability
   def user_abilities
     guest_abilities
     can :read, [Reward]
-    can :create, [Answer, Question, Comment, Vote]
+    can :create, [Answer, Question, Comment]
+    can :create, Vote do |vote, voteable|
+      voteable.user_id != user.id
+    end
     can :destroy, [Answer, Question, Vote], user_id: user.id
     cannot :destroy, Vote, voteable: {user_id: user.id}
     can :destroy, Link, linkable: {user_id: user.id}
