@@ -18,7 +18,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'with valid attributes' do
+    context 'with invalid attributes' do
       it 'doesnt save a new answer in the db' do
         expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }, format: :js  }.to_not change(Answer, :count)
       end
@@ -31,72 +31,18 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do 
-    let!(:answer) { create(:answer, question: question, user: user) }
-    context 'Author' do
-      before { login(user) }
-      it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer }, format: :js  }.to change(Answer, :count).by(-1)
-      end
-  
-      it 'render delete' do
-        delete :destroy, params: { id: answer }, format: :js 
-        expect(response).to render_template :destroy
-      end
-    end
-    context 'Not author' do
-      before { login(user_not_author) }
-      it 'not deletes the answer' do
-        expect { delete :destroy, params: { id: answer }, format: :js  }.to_not change(Answer, :count)
-      end
-  
-      it 'render delete' do
-        delete :destroy, params: { id: answer }, format: :js 
-        expect(response).to render_template :destroy
-      end
+    it_behaves_like 'DELETE #destroy' do
+      let!(:object) { create(:answer, question: question, user: user) }
     end
   end
 
   describe 'PATCH #update' do
-    let!(:answer) { create(:answer, question: question, user: user) }
-
-    context 'author, with valid attributes' do
-      before { login(user) }
-
-      it 'change the answer' do
-        patch :update, params: { id: answer, answer: {body: 'new body'} } , format: :js 
-        answer.reload
-        expect(answer.body).to eq('new body')
-      end
-  
-      it 'render update' do
-        patch :update, params: { id: answer, answer: {body: 'new body'} }, format: :js
-        expect(response).to render_template :update
-      end
-    end
-
-    context 'author, with invalid attributes' do
-      before { login(user) }
-      it 'not change the answer' do
-        expect { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js }.to_not change(answer, :body)
-      end
-  
-      it 'render update' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
-        expect(response).to render_template :update
-      end
-      
-    end
-
-    context 'not author' do
-      before { login(user_not_author) }
-      it 'not change the answer' do
-        expect { patch :update, params: { id: answer, answer: {body: 'new body'} }, format: :js }.to_not change(answer, :body)
-      end
-  
-      it 'render update' do
-        patch :update, params: { id: answer, answer: {body: 'new body'} }, format: :js
-        expect(response).to render_template :update
-      end
+    it_behaves_like 'PATCH #update' do
+      let!(:object) { create(:answer, question: question, user: user) }
+      let(:params) { {id: object, answer: {body: 'new body'}} }
+      let(:invalid_params) { {id: object, answer: attributes_for(:answer, :invalid)} }
+      let(:fields) { %w[body] }
+      let(:obj_fields) { {body: 'new body'} }
     end
   end
 end
