@@ -1,5 +1,4 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  before_action :current_ability
   authorize_resource
   
   def index
