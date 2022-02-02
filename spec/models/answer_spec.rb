@@ -19,4 +19,13 @@ RSpec.describe Answer, type: :model do
   it { should accept_nested_attributes_for :links }
 
   it_behaves_like 'voteable'
+
+  describe 'subscription' do
+    let(:answer) { build(:answer) }
+
+    it 'calls SubscriptionJob' do
+      expect(SubscriptionJob).to receive(:perform_later).with(answer)
+      answer.save!
+    end
+  end
 end

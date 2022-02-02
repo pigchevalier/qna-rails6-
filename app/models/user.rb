@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :rewards, dependent: :nullify
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :subs, dependent: :destroy
 
   def vote(object)
     votes.find_by(voteable: object)
@@ -15,5 +16,13 @@ class User < ApplicationRecord
 
   def vote?(object)
     votes.find_by(voteable: object).present?
+  end
+
+  def sub(question)
+    subs.find_by(question: question)
+  end
+
+  def sub?(question)
+    subs.find_by(question: question).present?
   end
 end
