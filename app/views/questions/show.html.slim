@@ -18,6 +18,9 @@ div[class='question' id="#{question.id}"]
 
   =render 'comments/comment', obj: question 
 
+.sub
+  =render "subs/sub"
+
 .answer-errors
   = render 'shared/errors', resource: answer
 .answers

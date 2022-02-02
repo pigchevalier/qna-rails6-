@@ -7,6 +7,7 @@ class Question < ApplicationRecord
   has_many :links, dependent: :destroy, as: :linkable
   has_many :rewards, dependent: :destroy
   has_many :comments, dependent: :destroy, as: :commenteable
+  has_many :subs, dependent: :destroy
 
   has_many_attached :files
 
@@ -22,5 +23,9 @@ class Question < ApplicationRecord
         self.rewards.update_all!(answer: self.best_answer, user: current_user)
       end
     end
+  end
+
+  def self.last_day
+    Question.where("created_at >= :last_day", { last_day: 1.days.ago } )
   end
 end

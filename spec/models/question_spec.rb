@@ -7,6 +7,7 @@ RSpec.describe Question, type: :model do
     it { should have_many(:links).dependent(:destroy) }
     it { should have_many(:rewards).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
+    it { should have_many(:subs).dependent(:destroy) }
   end
 
   describe 'validations' do
